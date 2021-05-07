@@ -96,7 +96,7 @@ class HiddenShuffle{
 			long s = 0;
 			double F = L*1.0/n;
 			
-			while (F < u && s < (n-L-1)){
+			while (F < u && s < (n-L)){
 				
 				F = 1.0-(1.0-L*1.0/(n-s))*(1.0-F);
 				++s;

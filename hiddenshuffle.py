@@ -23,7 +23,7 @@ def sampleiterator(N, n): # draw WOR from 0..N-1
 		H = H-1
 	while L > 0: # STEP 3: draw low-items
 		u = uniform(0,1); s=0; F=float(L)/n
-		while F < u and s < (n-L-1):
+		while F < u and s < (n-L):
 			F = 1-(1-float(L)/(n-s))*(1-F)
 			s = s+1
 		L = L-1; n = n-s-1

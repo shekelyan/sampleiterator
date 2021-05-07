@@ -7,7 +7,7 @@ def sampleiterator(N, n): # draw WOR from 0..N-1
 		while i < n:
 			q = 1.0-float(N-n)/(N-i)
 			i = i+int(log(uniform(0,1), 1-q) )
-			p_i = 1.0-float(N-n)/(N-i)
+			p_i = 1.0-float(N-n)/max(N-i, 1) # max(N-i,1) to supress possible ZeroDivisionError
 			if i < n and uniform(0,1) < p_i/q:
 				H = H-1
 			i = i+1

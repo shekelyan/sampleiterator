@@ -32,7 +32,7 @@ public:
 	
 	inline size_t randomInteger(size_t a, size_t b){
 	
-		return std::uniform_int_distribution<>(a, b)(generator);
+		return std::uniform_int_distribution<long>(a, b)(generator);
 	}
 };
 

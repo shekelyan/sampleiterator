@@ -127,7 +127,7 @@ namespace SampleIterator{
 			
 				while (F < u && s < (n-L)){
 				
-					F = 1.0-(1.0-L*1.0/(n-s))*(1.0-F);
+					F = 1.0-(1.0-L*1.0/(n-s-1))*(1.0-F);
 					++s;
 				}
 			

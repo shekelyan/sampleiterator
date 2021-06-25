@@ -7,7 +7,7 @@ def sampleiterator(N, n): # draw WOR from 0..N-1
 		while i < n:
 			q = 1.0-float(N-n)/(N-i)
 			i = i+int(log(uniform(0,1), 1-q) )
-			p_i = 1.0-float(N-n)/max(N-i, 1) # max(N-i,1) to avoid ZeroDivisionError when i = N
+			p_i = 1.0-float(N-n)/max(N-i, 1)
 			if i < n and uniform(0,1) < p_i/q:
 				H = H-1
 			i = i+1
@@ -24,7 +24,7 @@ def sampleiterator(N, n): # draw WOR from 0..N-1
 	while L > 0: # STEP 3: draw low-items
 		u = uniform(0,1); s=0; F=float(L)/n
 		while F < u and s < (n-L):
-			F = 1-(1-float(L)/(n-s))*(1-F)
+			F = 1-(1-float(L)/(n-s-1))*(1-F)
 			s = s+1
 		L = L-1; n = n-s-1
 		yield (N-1) - n

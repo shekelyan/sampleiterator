@@ -7,4 +7,4 @@ Paper: http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf
 * p.7, last sentence before 3.3, "n / (N-s-1)" instead of "n / (N-s)"
 * (no noticeable impact on experiments in the paper)
 
-Corrected: http://www.compsciscience.org/shekelyan/papers/hiddenshuffle.pdf
+Corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf

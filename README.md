@@ -11,14 +11,13 @@ The Hidden Shuffle method generates a random set of integers in increasing order
 
 # Errata / Corrections
 
-The original manuscript had an off-by-one error: http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf
+The original manuscript (http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf) had an off-by-one error: 
 
 * p.6, Code 1, l.10, "max(N-i,1)" instead of "N-i" to suppress ZeroDivisionError
 * p.6, Code 1, l.27, "(n-s-1)" instead of "(n-s)"
 * p.7, last sentence before 3.3, "n / (N-s-1)" instead of "n / (N-s)"
 * (no noticeable impact on experiments in the paper)
-
-Corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf
+* corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf
 
 Relevant [XKCD](https://xkcd.com/2248/):
 

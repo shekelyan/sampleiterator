@@ -25,37 +25,36 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
 	N = length(a)
 	n = length(x)
 	n <= N || error("length(x) should not exceed length(a)")
-    
-    H = 0; i = 0; j = 1 # STEP 1: compute H
-    if N > n
-    	H = n
-    	while i < n
-    		q = 1.0-float(N-n)/(N-i)
-    		i = i+trunc(Int,log(1-q, rand(rng)))
-    		p_i = 1.0-float(N-n)/(N-i)
-    		if i < n && rand(rng) < p_i/q
-    			H = H-1
-    		end
-    		i = i+1
-    	end
-    end
-    L = n-H; a_ = 1.0
-    while H > 0 # STEP 2: draw high-items
-    	S_old = n+trunc(Int,a_*(N-n))
-    	a_ = a_ * rand(rng)^(1.0/H)
-    	S = n+trunc(Int, a_*(N-n))
-    	if S < S_old
-    		@inbounds x[j+=1] = a[N-S]
-    	else
-    		L = L+1
-    	end
-    	H = H-1
-    end
-    
-    if faster && L > 0 && N > n # slightly faster with existing Alg A implementation
-    	@views seqsample_a!(rng,a[(N-n):N],x[(n-L):n]); L = 0
-    end
-    
+	
+	H = 0; i = 0; j = 1 # STEP 1: compute H
+	if N > n
+		H = n
+		while i < n
+			q = 1.0-float(N-n)/(N-i)
+			i = i+trunc(Int,log(1-q, rand(rng)))
+			p_i = 1.0-float(N-n)/(N-i)
+			if i < n && rand(rng) < p_i/q
+				H = H-1
+			end
+			i = i+1
+		end
+	end
+	L = n-H; a_ = 1.0
+	while H > 0 # STEP 2: draw high-items
+		S_old = n+trunc(Int,a_*(N-n))
+		a_ = a_ * rand(rng)^(1.0/H)
+		S = n+trunc(Int, a_*(N-n))
+		if S < S_old
+			@inbounds x[j+=1] = a[N-S]
+		else
+			L = L+1
+		end
+		H = H-1
+	end
+
+	if faster && L > 0 && N > n # slightly faster with existing Alg A implementation
+		@views seqsample_a!(rng,a[(N-n):N],x[(n-L):n]); L = 0
+	end
 	while L > 0 # STEP 3: draw low-items
 		u = rand(rng); s=0; F=float(L)/n
 		while F < u && s < (n-L)
@@ -75,9 +74,9 @@ seqsample_hiddenshuffle!(a::AbstractArray, x::AbstractArray) = seqsample_hiddens
 println("Random Subset Selection (Simple Random Sampling Without Replacement)")
 
 sample_unordered = "sample (unordered) "
-sample_ordered =   "sample             "
-sample_algd =      "sample (alg d)     "
-hiddenshuffle =    "hidden shuffle     "
+sample_ordered =   "sample			 "
+sample_algd =	  "sample (alg d)	 "
+hiddenshuffle =	"hidden shuffle	 "
 
 println("\nLegend of Methods to Randomly Select n Unique integers Between 1 and N\n")
 

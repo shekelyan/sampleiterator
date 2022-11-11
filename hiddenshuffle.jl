@@ -45,7 +45,7 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
 		a_ = a_ * rand(rng)^(1.0/H)
 		S = n+trunc(Int, a_*(N-n))
 		if S < S_old
-			@inbounds x[j+=1] = a[N-S]
+			@inbounds x[j] = a[N-S]; j+=1
 		else
 			L = L+1
 		end
@@ -62,7 +62,7 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
 			s = s+1
 		end
 		L = L-1; n = n-s-1
-		@inbounds x[j+=1] = a[N-n]
+		@inbounds x[j] = a[N-n]; j+=1
 	end
 end
 

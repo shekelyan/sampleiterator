@@ -60,7 +60,7 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
 		u = rand(rng); s=0; F=float(L)/n
 		while F < u && s < (n-L)
 			F = 1-(1-float(L)/(n-s-1))*(1-F)
-		s = s+1
+			s = s+1
 		end
 		L = L-1; n = n-s-1
 		@inbounds x[j+=1] = a[N-n]

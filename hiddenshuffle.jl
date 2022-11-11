@@ -53,7 +53,7 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
 	end
 
 	if faster && L > 0 && N > n # slightly faster with existing Alg A implementation
-		@views seqsample_a!(rng,a[(N-n):N],x[(n-L):n]); L = 0
+		@views seqsample_a!(rng,a[(N-n+1):N],x[(n-L+1):n]); L = 0
 	end
 	while L > 0 # STEP 3: draw low-items (with Vitter's Alg A)
 		u = rand(rng); s=0; F=float(L)/n

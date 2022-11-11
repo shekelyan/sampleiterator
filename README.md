@@ -5,9 +5,9 @@ The Hidden Shuffle method generates a random set of integers in increasing order
 # Implementations
 
 * hiddenshuffle.cpp (C++)
-* hiddenshuffle.py (python.org)
-* hiddenshuffle.d (dlang.org)
-* hiddenshuffle.jl (julialang.org)
+* hiddenshuffle.py (https://python.org)
+* hiddenshuffle.d (https://dlang.org)
+* hiddenshuffle.jl (https://julialang.org)
 
 # Errata / Corrections
 

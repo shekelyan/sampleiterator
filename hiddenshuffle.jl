@@ -4,7 +4,7 @@
 #(uncomment previous line if StatsBase is missing)
 
 using StatsBase
-import StatsBase: AbstractRNG, Random, randexp, seqsample_d!
+import StatsBase: AbstractRNG, Random, randexp, sample!,seqsample_a!,seqsample_d!
 
 using Random: Sampler, Random.GLOBAL_RNG
 
@@ -17,7 +17,7 @@ PMLR 130:3628-3636, 2021.
 This algorithm consumes ``O(k)`` random numbers, with `k=length(x)`.
 The outputs are ordered.
 """
-function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::AbstractArray)
+function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::AbstractArray, faster)
 	1 == firstindex(a) == firstindex(x) ||
 		throw(ArgumentError("non 1-based arrays are not supported"))
 	Base.mightalias(a, x) &&
@@ -45,78 +45,77 @@ function seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::Abstrac
     	a_ = a_ * rand(rng)^(1.0/H)
     	S = n+trunc(Int, a_*(N-n))
     	if S < S_old
-    		x[j] = a[N-S]; j = j+1
+    		@inbounds x[j+=1] = a[N-S]
     	else
     		L = L+1
     	end
     	H = H-1
     end
-    while L > 0 # STEP 3: draw low-items
-    	u = rand(rng); s=0; F=float(L)/n
-    	while F < u && s < (n-L)
-    		F = 1-(1-float(L)/(n-s-1))*(1-F)
-    		s = s+1
-    	end
-    	L = L-1; n = n-s-1
-    	x[j] = a[N-n]; j = j+1
+    
+    if faster && L > 0 && N > n # slightly faster with existing Alg A implementation
+    	@views seqsample_a!(rng,a[(N-n):N],x[(n-L):n]); L = 0
     end
+    
+	while L > 0 # STEP 3: draw low-items
+		u = rand(rng); s=0; F=float(L)/n
+		while F < u && s < (n-L)
+			F = 1-(1-float(L)/(n-s-1))*(1-F)
+		s = s+1
+		end
+		L = L-1; n = n-s-1
+		@inbounds x[j+=1] = a[N-n]
+	end
 end
 
+seqsample_hiddenshuffle!(rng::AbstractRNG, a::AbstractArray, x::AbstractArray) = seqsample_hiddenshuffle!(rng::AbstractRNG, a, x, true)
 seqsample_hiddenshuffle!(a::AbstractArray, x::AbstractArray) = seqsample_hiddenshuffle!(Random.GLOBAL_RNG, a, x)
 
-# testing
+# TESTING
+
+println("Random Subset Selection (Simple Random Sampling Without Replacement)")
 
 sample_unordered = "sample (unordered) "
 sample_ordered =   "sample             "
 sample_algd =      "sample (alg d)     "
 hiddenshuffle =    "hidden shuffle     "
 
-println("\nLegend of Simple Random Sampling Without Replacement Methods\n")
+println("\nLegend of Methods to Randomly Select n Unique integers Between 1 and N\n")
 
-print(sample_unordered)
-println(" StratsBase.sample!(population,sample,ordered=false,replace=false)")
-print(sample_ordered)
-println(" StratsBase.sample!(population,sample,ordered=true,replace=false)")
-print(sample_algd)
-println(" StratsBase.seqsample_d!(population,sample)")
-print(hiddenshuffle)
-println(" seqsample_hiddenshuffle!(population,sample)")
+println(sample_unordered*" sample!(population,sample,ordered=false,replace=false)")
+println(sample_ordered*" sample!(population,sample,ordered=true,replace=false)")
+println(sample_algd*" seqsample_d!(population,sample)")
+println(hiddenshuffle*" seqsample_hiddenshuffle!(population,sample)")
 
 println("\nPrecompilation Time\n")
 
-print(sample_ordered)
-@time precompile( StatsBase.sample!, (UnitRange{Int64}, Array{Int64, 1}))
-print(sample_algd)
-@time precompile( StatsBase.seqsample_d!, (UnitRange{Int64}, Array{Int64, 1}))
-print(hiddenshuffle)
-@time precompile( seqsample_hiddenshuffle!, (UnitRange{Int64}, Array{Int64, 1}))
+print(sample_ordered); @time precompile( sample!, (UnitRange{Int64}, Array{Int64, 1}))
+print(sample_algd); @time precompile( seqsample_d!, (UnitRange{Int64}, Array{Int64, 1}))
+print(hiddenshuffle); @time precompile( seqsample_hiddenshuffle!, (UnitRange{Int64}, Array{Int64, 1},Bool))
 
-# Some runtime experiments to other sampling methods implemented in Julia
+# SAMPLES
 
-for pop_pow in (7:9)
+pop_pow = 3; sample_pow = 1
 
-	for sample_pow in (6:6)	
-	
-		pop = (1:10^pop_pow)
-		samplesize = 10^sample_pow
-		x = zeros(Int, samplesize)
+pop = (1:10^pop_pow); samplesize = 10^sample_pow; x = zeros(Int, samplesize)
+print("\n[N = 10^"*string(pop_pow)*", n = 10^"*string(sample_pow)*"] ")
+println("Sample (ordered sample unless indicated otherwise)\n")
 
-		print("\n[N = 10^")
-		print(pop_pow)
-		print(", n = 10^")
-		print(sample_pow)
-		println("] Runtime (ordered sample unless indicated otherwise)\n")
+print(sample_unordered); StatsBase.sample!(pop, x, ordered=false, replace=false  ); println(x)
+print(sample_ordered); StatsBase.sample!(pop, x, ordered=true, replace=false  ); println(x)
+print(sample_algd); StatsBase.seqsample_d!(pop, x); println(x)
+print(hiddenshuffle); seqsample_hiddenshuffle!(pop, x); println(x)
 
-		print(sample_unordered)
-		@time StatsBase.sample!(pop, x, ordered=false, replace=false  )
+# RUNTIMES
 
-		print(sample_ordered)
-		@time StatsBase.sample!(pop, x, ordered=true, replace=false  )
-
-		print(sample_algd)
-		@time StatsBase.seqsample_d!(pop, x)
-		
-		print(hiddenshuffle)
-		@time seqsample_hiddenshuffle!(pop, x)
+for pop_pow in (7:10)
+	for sample_pow in (6:6)
+		population = (1:10^pop_pow); sample = zeros(Int, 10^sample_pow)
+		print("\n[N = 10^"*string(pop_pow)*", n = 10^")
+		print(string(sample_pow)*"] Runtime (ordered sample unless indicated otherwise)\n")
+		print(sample_unordered); @time StatsBase.sample!(population, sample, ordered=false, replace=false  )
+		print(sample_ordered); @time StatsBase.sample!(population, sample, ordered=true, replace=false  )
+		print(sample_algd); @time StatsBase.seqsample_d!(population, sample)
+		print(hiddenshuffle); @time seqsample_hiddenshuffle!(population, sample)
+		#print(hiddenshuffle); @time seqsample_hiddenshuffle!(Random.GLOBAL_RNG,population, sample, false)
 	end
 end

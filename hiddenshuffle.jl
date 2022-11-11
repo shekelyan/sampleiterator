@@ -74,9 +74,9 @@ seqsample_hiddenshuffle!(a::AbstractArray, x::AbstractArray) = seqsample_hiddens
 println("Random Subset Selection (Simple Random Sampling Without Replacement)")
 
 sample_unordered = "sample (unordered) "
-sample_ordered =   "sample			 "
-sample_algd =	  "sample (alg d)	 "
-hiddenshuffle =	"hidden shuffle	 "
+sample_ordered =   "sample             "
+sample_algd =	   "sample (alg d)     "
+hiddenshuffle =	   "hidden shuffle     "
 
 println("\nLegend of Methods to Randomly Select n Unique integers Between 1 and N\n")
 

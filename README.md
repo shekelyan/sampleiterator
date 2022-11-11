@@ -8,3 +8,10 @@ Paper: http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf
 * (no noticeable impact on experiments in the paper)
 
 Corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf
+
+# Implementations
+
+* hiddenshuffle.cpp (C++)
+* hiddenshuffle.py (python.org)
+* hiddenshuffle.d (dlang.org)
+* hiddenshuffle.jl (julialang.org)

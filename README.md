@@ -1,4 +1,4 @@
-# Hidden Shuffle for (Sequential) Simple Random Sampling Without Replacement (random subset)
+# (Sequential) Simple Random Sampling Without Replacement
 
 The Hidden Shuffle method generates a random set of integers in increasing order for simple random sampling without replacement (using the integers as indexing positions). It only uses O(1) memory and is comparably fast as unsorted sampling methods (default in most standard libraries).
 

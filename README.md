@@ -4,7 +4,7 @@ The Hidden Shuffle method generates a random set of integers in increasing order
 
 # Implementations
 
-* hiddenshuffle.cpp (C++)
+* hiddenshuffle.cpp ([C++](https://en.wikipedia.org/wiki/C%2B%2B))
 * hiddenshuffle.py (https://python.org)
 * hiddenshuffle.d (https://dlang.org)
 * hiddenshuffle.jl (https://julialang.org)
@@ -20,7 +20,7 @@ The original manuscript had an off-by-one error: http://proceedings.mlr.press/v1
 
 Corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf
 
-Relevant XKCD:
+Relevant [XKCD](https://xkcd.com/2248/):
 
 ![Relevant XKCD](https://imgs.xkcd.com/comics/new_years_eve.png)
 

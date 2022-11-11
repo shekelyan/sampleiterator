@@ -21,5 +21,6 @@ The original manuscript had a off-by-one error: http://proceedings.mlr.press/v13
 Corrected: https://compsci.science/shekelyan/hiddenshuffle.pdf
 
 Relevant XKCD:
+
 ![Relevant XKCD](https://imgs.xkcd.com/comics/new_years_eve.png)
 

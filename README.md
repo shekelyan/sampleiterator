@@ -7,6 +7,7 @@ The Hidden Shuffle sampling method generates a random set of integers in increas
 * hiddenshuffle.cpp ([C++](https://en.wikipedia.org/wiki/C%2B%2B))
 * HiddenShuffle.java (https://www.java.com)
 * hiddenshuffle.py (https://python.org)
+* hiddenshuffle.go (https://go.dev)
 * hiddenshuffle.d (https://dlang.org)
 * hiddenshuffle.jl (https://julialang.org)
 

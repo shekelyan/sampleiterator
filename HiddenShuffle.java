@@ -40,8 +40,6 @@ public class HiddenShuffle implements java.lang.Iterable<Long>, java.util.Iterat
 	
 		L = n-H; // (n-H) is the number of low-low swaps
 		a = 1.0;
-		
-		System.out.println("HiddenShuffle()");
 	}
 
 	@Override

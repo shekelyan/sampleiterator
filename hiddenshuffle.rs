@@ -171,7 +171,7 @@ fn main() {
 			
 		}
 		println!("checksum = {}", sum);
-		println!("seqsample (unoptimized) + shuffling takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("hiddenshuffle + shuffling takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
 	println!("\n\nNote: This indicates one should use different methods for shuffled/sorted sampling.");

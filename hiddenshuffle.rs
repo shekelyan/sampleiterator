@@ -1,8 +1,8 @@
 // Tested with Rust 1.0 which lacks random number generation in the standard library.
 // Ensure that the crate "rand" is installed ("cargo install rand").
-// Create a new project with ("cargo new hiddenshuffle").
+// Create a new project with ("cargo new hiddenshuffle --bin").
 // Add rand as a dependency ("cargo add rand").
-// Put this code into the main file.
+// Copy this file's code into the main file.
 // For runtime measurements always use release-mode ("cargo run --release").
 // The Cargo.toml file should look similar to the following:
 /*

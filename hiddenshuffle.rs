@@ -127,6 +127,6 @@ fn main() {
 		println!("hiddenshuffle takes {} seconds for {} sequential sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
-	println!("Note: this indicates one generate a sequential/sorted sample as quickly as a shuffled one");
+	println!("\n\nNote: this indicates one generate a sequential/sorted sample as quickly as a shuffled one");
 	println!("while reducing the memory footprint to O(1)");
 }

@@ -84,7 +84,7 @@ fn seqsample(rng : & mut rand::rngs::ThreadRng, N_ : usize, n_ : usize) -> Hidde
 		
 			i += rng.gen::<f64>().log(1.0-q).floor() as usize;
 			
-			let pi = 1.0-1.0*f64::from( (N-n) as u32)/f64::from( (N-i) as u32);
+			let pi = 1.0-1.0*f64::from( (N-n) as u32)/f64::from( (N-i).max(1) as u32);
 		
 			if i < n && (rng.gen::<f64>() < (pi/q) ){
 				H -= 1;
@@ -100,7 +100,7 @@ fn main() {
 	
 	let mut rng = thread_rng();
 	
-	const REPS : usize = 1000;
+	const REPS : usize = 500;
 	const POPULATION : usize = 1000*1000*10;
 	const SAMPLESIZE : usize = 1000*1000;
 	
@@ -135,7 +135,7 @@ fn main() {
 	println!("while reducing the memory footprint to O(1)!");
 	
 	
-	println!("\n\nFirst sampling and then sorting/shuffling is a lot slower:\n\n");
+	println!("\n\nFirst sampling and then sorting/shuffling is noticeably slower:\n\n");
 	
 	{
 		let now = Instant::now(); let mut sum : usize = 0;

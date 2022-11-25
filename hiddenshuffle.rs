@@ -1,4 +1,10 @@
-// Example for Cargo.toml given in next comment):
+// Tested with Rust 1.0 which lacks random number generation in the standard library.
+// Ensure that the crate "rand" is installed ("cargo install rand").
+// Create a new project with ("cargo new hiddenshuffle").
+// Add rand as a dependency ("cargo add rand").
+// Put this code into the main file.
+// For runtime measurements always use release-mode ("cargo run --release").
+// The Cargo.toml file should look similar to the following:
 /*
 [package]
 name = "rust"
@@ -13,6 +19,7 @@ rand = "0.8.5"
 
 extern crate rand;
 use rand::{thread_rng,Rng}; use std::time::{Instant};
+use rand::seq::SliceRandom;
 
 struct HiddenShuffle <'x>{
     H: usize, L: usize, N: usize, n: usize, a: f64,
@@ -93,18 +100,16 @@ fn main() {
 	
 	let mut rng = thread_rng();
 	
-	const REPS : usize = 10;
+	const REPS : usize = 1000;
 	const POPULATION : usize = 1000*1000*10;
 	const SAMPLESIZE : usize = 1000*1000;
 	
 	{
-		let now = Instant::now();
-		let mut sum : usize = 0;
+		let now = Instant::now(); let mut sum : usize = 0;
 	
 		for i in 1..REPS{
 	
 			for j in rand::seq::index::sample(&mut rng, POPULATION,SAMPLESIZE){
-		
 				sum += i+j;
 			}
 		}
@@ -114,8 +119,7 @@ fn main() {
 	}
 	
 	{
-		let now = Instant::now();
-		let mut sum : usize = 0;
+		let now = Instant::now(); let mut sum : usize = 0;
 		
 		for i in 1..REPS{
 		
@@ -127,6 +131,49 @@ fn main() {
 		println!("hiddenshuffle takes {} seconds for {} sequential sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
-	println!("\n\nNote: this indicates one generate a sequential/sorted sample as quickly as a shuffled one");
-	println!("while reducing the memory footprint to O(1)");
+	println!("\n\nNote: one can get a sequential/sorted sample just as quickly as a shuffled one");
+	println!("while reducing the memory footprint to O(1)!");
+	
+	
+	println!("\n\nFirst sampling and then sorting/shuffling is a lot slower:\n\n");
+	
+	{
+		let now = Instant::now(); let mut sum : usize = 0;
+		let mut sample: [usize; SAMPLESIZE] = [0; SAMPLESIZE];
+	
+		for i in 1..REPS{
+	
+			let mut k = 0;
+			for j in rand::seq::index::sample(&mut rng, POPULATION, SAMPLESIZE){
+		
+				sample[k] = j; k = k+1; sum += i+j
+			}
+			sample.sort()
+		}
+		println!("checksum = {}", sum);
+		println!("rand::seq::index::sample + sorting takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+	}
+	
+	{
+		let now = Instant::now(); let mut sum : usize = 0;
+		let mut sample: [usize; SAMPLESIZE] = [0; SAMPLESIZE];
+		
+		for i in 1..REPS{
+	
+			let mut k = 0;
+			for j in seqsample(&mut rng, POPULATION, SAMPLESIZE){
+				sample[k] = j;
+				k = k+1;
+				sum += i+j
+			}
+			
+			sample.shuffle(&mut rng); 
+			
+		}
+		println!("checksum = {}", sum);
+		println!("seqsample (unoptimized) + shuffling takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+	}
+	
+	println!("\n\nNote: This indicates one should use different methods for shuffled/sorted sampling.");
+	
 }

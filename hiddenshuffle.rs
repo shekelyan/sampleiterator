@@ -151,7 +151,7 @@ fn main() {
 			sample.sort()
 		}
 		println!("checksum = {}", sum);
-		println!("rand::seq::index::sample + sorting takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("rand::seq::index::sample + sorting takes {} seconds for {} sequential sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
 	{
@@ -171,9 +171,10 @@ fn main() {
 			
 		}
 		println!("checksum = {}", sum);
-		println!("hiddenshuffle + shuffling takes {} seconds for {} sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("hiddenshuffle + shuffling takes {} seconds for {} shuffled sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
-	println!("\n\nNote: This indicates one should use different methods for shuffled/sorted sampling.");
+	println!("\n\nNote: This indicates one should keep using different methods for shuffled/sorted sampling");
+	println!("and use sorted sampling when the order can be arbitrary to reduce memory usage.");
 	
 }

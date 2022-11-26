@@ -1,0 +1,59 @@
+<html>
+<head>
+<script type="text/javascript">
+    	
+const sampleiterator = function*(N, n){
+	
+	H = 0; i = 0; // STEP 1: compute H
+	if (N > n){
+		H = n;
+		while (i < n){
+			q = 1.0-(N-n)/(N-i);
+			i = i+Math.floor(Math.log(Math.random())/Math.log(1-q) );
+			p_i = 1.0-(N-n)/Math.max(N-i, 1);
+			if (i < n && Math.random() < p_i/q){
+				H = H-1;
+			}
+			i = i+1;
+		}
+	}
+	L = n-H; a = 1.0;
+	
+	while (H > 0){ // STEP 2: draw high-items
+		S_old = n+Math.floor(a*(N-n) );
+		a = a * Math.pow(Math.random(),1.0/H);
+		S = n+Math.floor(a*(N-n) );
+		if (S < S_old){
+			yield (N-1)-S;
+		} else {
+			L = L+1;  // duplicate detected
+		}
+		H = H-1;
+	}
+		
+	while (L > 0){ // STEP 3: draw low-items
+		u = Math.random(); s=0; F=L/n
+		while (F < u && s < (n-L)){
+			F = 1-(1-L/(n-s-1))*(1-F);
+			s = s+1;
+		}
+		L = L-1; n = n-s-1;
+		yield (N-1) - n;
+	}
+}
+
+N = 1000;
+n = 10;
+
+document.write("<h3>Random subset of size "+n+" out of all integers between 0 and "+(N-1)+"</h3>");
+
+for (const val of sampleiterator(1000,10)) {
+	
+	document.write(val+"</br>");	
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>

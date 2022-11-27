@@ -5,6 +5,7 @@ The Hidden Shuffle sampling method generates a random set of integers in increas
 # Implementations
 
 * hiddenshuffle.cpp ([C++](https://en.wikipedia.org/wiki/C%2B%2B))
+* hiddenshuffle.cs ([C#](https://learn.microsoft.com/en-us/dotnet/csharp))
 * hiddenshuffle.html ([JavaScript](https://en.wikipedia.org/wiki/JavaScript))
 * HiddenShuffle.java (https://www.java.com)
 * hiddenshuffle.py (https://python.org)

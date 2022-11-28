@@ -174,6 +174,6 @@ fn main() {
 			assert!(k == SAMPLESIZE); sample.sort()
 		}
 		println!("\nchecksum = {} (ignore this)", sum);
-		println!("It takes {} seconds for rand::seq::index::sample to get {} sorted sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("It takes {} seconds for rand::seq::index::sample + sorting to get {} sorted sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 }

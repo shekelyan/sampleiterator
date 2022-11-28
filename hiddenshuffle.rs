@@ -1,8 +1,8 @@
 // Tested with Rust 1.0 which lacks random number generation in the standard library.
 // Ensure that the crate "rand" is installed ("cargo install rand").
-// Create a new project with ("cargo new hiddenshuffle --bin").
+// Create a new project with ("cargo new hiddenshuffle").
 // Add rand as a dependency ("cargo add rand").
-// Copy this file's code into the main file.
+// Put this code into the main file.
 // For runtime measurements always use release-mode ("cargo run --release").
 // The Cargo.toml file should look similar to the following:
 /*
@@ -21,12 +21,12 @@ extern crate rand;
 use rand::{thread_rng,Rng}; use std::time::{Instant};
 use rand::seq::SliceRandom;
 
-struct HiddenShuffle <'x>{
+struct HiddenShuffle<'a>{
     H: usize, L: usize, N: usize, n: usize, a: f64,
-    rng : &'x mut rand::rngs::ThreadRng
+    rng : &'a mut rand::rngs::ThreadRng
 }
 
-impl Iterator for HiddenShuffle<'_> {
+impl <'a> Iterator for HiddenShuffle<'a>{
 
 	type Item = usize;
 	fn next(&mut self) -> Option<Self::Item> {
@@ -100,81 +100,80 @@ fn main() {
 	
 	let mut rng = thread_rng();
 	
-	const REPS : usize = 500;
+	const REPS : usize = 250;
 	const POPULATION : usize = 1000*1000*10;
 	const SAMPLESIZE : usize = 1000*1000;
 	
+	let mut sample: [usize; SAMPLESIZE] = [0; SAMPLESIZE];
+	
+	println!("\nGetting a sorted sample with hidden shuffle using O(1) memory");
+	println!("and a shuffled sample using O(k) memory is comparably fast:");
+	
 	{
 		let now = Instant::now(); let mut sum : usize = 0;
 	
-		for i in 1..REPS{
+		for i in 0..REPS{
 	
+			let mut k = 0;
 			for j in rand::seq::index::sample(&mut rng, POPULATION,SAMPLESIZE){
-				sum += i+j;
+				sum += i+j; k = k+1;
 			}
+			assert!(k == SAMPLESIZE);
 		}
 	
-		println!("checksum = {}\n", sum);
-		println!("rand::seq::index::sample takes {} seconds for {} shuffled sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("\nchecksum = {} (ignore this)", sum);
+		println!("It takes {} seconds for rand::seq::index::sample to get {} shuffled sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
 	{
 		let now = Instant::now(); let mut sum : usize = 0;
 		
-		for i in 1..REPS{
+		for i in 0..REPS{
 		
+			let mut k = 0;
 			for j in seqsample(&mut rng, POPULATION, SAMPLESIZE) {
-				sum += i+j
+				sum += i+j; k = k+1;
 			}
+			assert!(k == SAMPLESIZE);
 		}
-		println!("checksum = {}\n", sum);
-		println!("hiddenshuffle takes {} seconds for {} sequential sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("\nchecksum = {} (ignore this)", sum);
+		println!("It takes {} seconds for hiddenshuffle to get {} sorted sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
 	
-	println!("\n\nNote: one can get a sequential/sorted sample just as quickly as a shuffled one");
-	println!("while reducing the memory footprint to O(1)!");
-	
-	
-	println!("\n\nFirst sampling and then sorting/shuffling is noticeably slower:\n\n");
+	println!("\nSorted sample+shuffling is slower than getting a shuffled sample directly:");
 	
 	{
 		let now = Instant::now(); let mut sum : usize = 0;
-		let mut sample: [usize; SAMPLESIZE] = [0; SAMPLESIZE];
+		
+		for i in 0..REPS{
 	
-		for i in 1..REPS{
+			let mut k = 0;
+			for j in seqsample(&mut rng, POPULATION, SAMPLESIZE){
+			
+				sample[k] = j; k = k+1; sum += i+j;
+			}
+			assert!(k == SAMPLESIZE); sample.shuffle(&mut rng); 
+		}
+		println!("\nchecksum = {} (ignore this)", sum);
+		println!("It takes {} seconds for hiddenshuffle + shuffling to get {} shuffled sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+	}
+	
+	println!("\nShuffled sample+sorting is noticeably slower than getting a sorted sample directly:");
+	
+	{
+		let now = Instant::now(); let mut sum : usize = 0;
+		
+	
+		for i in 0..REPS{
 	
 			let mut k = 0;
 			for j in rand::seq::index::sample(&mut rng, POPULATION, SAMPLESIZE){
 		
-				sample[k] = j; k = k+1; sum += i+j
+				sample[k] = j; k = k+1; sum += i+j;
 			}
-			sample.sort()
+			assert!(k == SAMPLESIZE); sample.sort()
 		}
-		println!("checksum = {}", sum);
-		println!("rand::seq::index::sample + sorting takes {} seconds for {} sequential sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
+		println!("\nchecksum = {} (ignore this)", sum);
+		println!("It takes {} seconds for rand::seq::index::sample to get {} sorted sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
 	}
-	
-	{
-		let now = Instant::now(); let mut sum : usize = 0;
-		let mut sample: [usize; SAMPLESIZE] = [0; SAMPLESIZE];
-		
-		for i in 1..REPS{
-	
-			let mut k = 0;
-			for j in seqsample(&mut rng, POPULATION, SAMPLESIZE){
-				sample[k] = j;
-				k = k+1;
-				sum += i+j
-			}
-			
-			sample.shuffle(&mut rng); 
-			
-		}
-		println!("checksum = {}", sum);
-		println!("hiddenshuffle + shuffling takes {} seconds for {} shuffled sets of {} numbers between 0 and {}", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);
-	}
-	
-	println!("\n\nNote: This indicates one should keep using different methods for shuffled/sorted sampling");
-	println!("and use sorted sampling when the order can be arbitrary to reduce memory usage.");
-	
 }

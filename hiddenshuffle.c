@@ -24,7 +24,6 @@ long hsnext(struct HiddenShuffle* ptr)
 		{
 			ptr->H -= 1;
 			return (ptr->N-1)-S;
-		
 		} 
 		else 
 		{
@@ -87,7 +86,6 @@ double randomdouble()
 
 int main(void)
 {
-	
 	struct HiddenShuffle hs; // allocate sampler state on stack
 	
 	srand( (int) time(NULL)); // use current time as random number seed

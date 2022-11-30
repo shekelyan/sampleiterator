@@ -9,7 +9,10 @@ long H,L,N,n; double a; // internal state
 double (*randomdouble)(); // pointer to function generating random double between 0 and 1
 };
 
-// move to next sampled index
+// Use HiddenShuffle to sample a random subset of n integers between 0 and (N-1) in increasing order.
+// input: pointer to internal sampler state
+// output: current sampled index
+// action: progress internal state of sampler
 long hsnext(struct HiddenShuffle* ptr)
 {
 
@@ -50,13 +53,12 @@ long hsnext(struct HiddenShuffle* ptr)
 	return -1;
 }
 
-// input: sampler pointer, population size and sample size
-// output: none
-long hsinit(struct HiddenShuffle* ptr, long universeSize, long sampleSize){
+// Use HiddenShuffle to sample a random subset of n integers between 0 and (N-1) in increasing order.
+// input: pointer to internal sampler state, population size and sample size
+// output: first sampled index
+// action: progress internal state of sampler
+long hsinit(struct HiddenShuffle* ptr, long N, long n){
 
-	const long N = universeSize;
-	const long n = sampleSize;
-	
 	if ((n <= 0) || (N < n))
 	{
 		return -1;
@@ -82,6 +84,10 @@ long hsinit(struct HiddenShuffle* ptr, long universeSize, long sampleSize){
 	return hsnext(ptr);
 }
 
+// Common way in C to generate a random number between 0 and 1.
+// input: none
+// output: pseudorandom 64-bit float between 0 and 1
+// action: progress internal state of random number generator
 double randomdouble()
 { // e.g., see http://robotics.stanford.edu/users/sahami/cs121/code/random.c
 	

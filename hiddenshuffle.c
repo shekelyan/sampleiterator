@@ -56,7 +56,7 @@ long hsnext(struct HiddenShuffle* ptr)
 // Use HiddenShuffle to generate a random subset of n integers between 0 and (N-1) in increasing order.
 // input: pointer to internal sampler state, population size N and sample size n
 // output: first sampled index
-// action: progress internal state of sampler
+// action: initialise and progress internal state of sampler
 long hsinit(struct HiddenShuffle* ptr, long N, long n){
 
 	if ((n <= 0) || (N < n))

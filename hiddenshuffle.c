@@ -105,6 +105,6 @@ int main(void)
 	for(long x = hsinit(&hs, 1000, 10); x != -1; x = hsnext(&hs))
 	{
 		
-		printf("%ld\n", x );
+		printf("%ld\n", x ); // print next unique integer between 0 and 999
 	}
 }

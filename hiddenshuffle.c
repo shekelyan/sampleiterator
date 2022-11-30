@@ -91,7 +91,7 @@ long hsinit(struct HiddenShuffle* ptr, long N, long n){
 double randomdouble()
 { // e.g., see http://robotics.stanford.edu/users/sahami/cs121/code/random.c
 	
-	return (double) rand() / ((double) RAND_MAX + 1);;
+	return (double) rand() / ((double) RAND_MAX + 1);
 }
 
 int main(void)

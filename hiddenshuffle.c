@@ -9,7 +9,7 @@ long H,L,N,n; double a; // internal state
 double (*randomdouble)(); // pointer to function generating random double between 0 and 1
 };
 
-// Use HiddenShuffle to sample a random subset of n integers between 0 and (N-1) in increasing order.
+// Use HiddenShuffle to generate a random subset of n integers between 0 and (N-1) in increasing order.
 // input: pointer to internal sampler state
 // output: current sampled index
 // action: progress internal state of sampler
@@ -53,7 +53,7 @@ long hsnext(struct HiddenShuffle* ptr)
 	return -1;
 }
 
-// Use HiddenShuffle to sample a random subset of n integers between 0 and (N-1) in increasing order.
+// Use HiddenShuffle to generate a random subset of n integers between 0 and (N-1) in increasing order.
 // input: pointer to internal sampler state, population size N and sample size n
 // output: first sampled index
 // action: progress internal state of sampler

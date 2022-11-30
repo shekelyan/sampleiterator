@@ -17,7 +17,7 @@ long hsnext(struct HiddenShuffle* ptr)
 {
 
 	while (ptr->H > 0)
-	{
+	{ // STEP 2
 		
 		const long S_old = ptr->n+(long) (ptr->a*(ptr->N-ptr->n));
 		ptr->a *= pow( (*(ptr->randomdouble))(), 1.0/ptr->H);
@@ -64,9 +64,9 @@ long hsinit(struct HiddenShuffle* ptr, long N, long n){
 		return -1;
 	}
 	
-	long H = 0; long i = 0; // STEP 1
+	long H = 0; long i = 0;
 	if (N > n)
-	{
+	{ // STEP 1
 		H = n;
 		while (i < n)
 		{

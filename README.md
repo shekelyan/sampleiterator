@@ -25,18 +25,18 @@ Overall:
   - after shuffling the *n* hot positions hold a random subset of size *n*
   - "hidden shuffle" is fast simulation of this (hidden) shuffling and selecting integers at hot positions
 - variation of [swap-based shuffling algorithm](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) can be chosen such that:
-  - cold<->cold swaps are executed last
-  - cold<->hot swaps guarantee that integer from cold position will stay in hot position
-  - (hot<->hot swaps do not really matter in this context)
+  - 'cold<->cold' swaps are executed last
+  - 'cold<->hot' swaps guarantee that integer from cold position will stay in hot position
+  - ('hot<->hot' swaps do not really matter in this context)
 - internally operate in descending order and then mirror positions
   - more of a quirk of current algorithm than anything deeply related to the method
 
-Note that the integers throughout the simulated/hidden shuffling algorithm cannot take the path of positions cold->hot->cold and only the following scenarios are possible:
+Note that the integers throughout the simulated/hidden shuffling algorithm cannot take the path of positions 'cold->hot->cold' and only the following scenarios are possible:
 
-- cold->hot (integer from originally cold position gets selected)
-- cold->cold (integer from originally cold position does not get selected)
-- hot->...->hot (integer from originally hot position gets selected)
-- hot->...->cold (integer from originally hot position does not get selected)
+- 'cold->hot' (integer from originally cold position gets selected)
+- 'cold->cold' (integer from originally cold position does not get selected)
+- 'hot->...->hot' (integer from originally hot position gets selected)
+- 'hot->...->cold' (integer from originally hot position does not get selected)
 
 Step 1:
   
@@ -49,11 +49,11 @@ Step 2:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
   - scaling (and rounding) those 0 to 1 values to random cold positions in descending order
     - (those random cold positions correspond to integers taking the path cold->hot)
-  - counting repeated cold positions towards integers taking the path hot->cold->...->hot
+  - counting repeated cold positions towards integers taking the path 'hot->cold->...->hot'
 
 Step 3:
 
-- *L* is the number of integers take the path hot->cold->...->hot or always stay in a hot position
+- *L* is the number of integers take the path 'hot->cold->...->hot' or always stay in a hot position
 - select random subset of size *L* from the hot positions
   - using any method that selects *L* random positions out of the *n* hot positions
     - the current algorithm uses Vitter's algorithm A from the literature

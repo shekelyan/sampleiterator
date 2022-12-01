@@ -45,18 +45,18 @@ Step 1:
 
 Step 2:
 
-- simulate the *H* cold positions involved in cold<->hot swaps by:
+- simulate the *H* cold positions involved in 'cold<->hot' swaps by:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
-  - scaling (and rounding) those 0 to 1 values to random cold positions in descending order
-    - (those random cold positions correspond to integers taking the path cold->hot)
+  - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
+    - (those random cold positions correspond to integers taking the path 'cold->hot')
   - counting repeated cold positions towards integers taking the path 'hot->cold->...->hot'
 
 Step 3:
 
-- *L* is the number of integers take the path 'hot->cold->...->hot' or always stay in a hot position
+- the number *L* counts the integers that take the path 'hot->cold->...->hot' or never entered a cold position
 - select random subset of size *L* from the hot positions
   - using any method that selects *L* random positions out of the *n* hot positions
-    - the current algorithm uses Vitter's algorithm A from the literature
+    - the current algorithm uses Vitter's algorithm A from the [literature](https://dl.acm.org/doi/pdf/10.1145/23002.23003)
 
 A more detailled explanation has been presented at the 24th International Conference on
 Artificial Intelligence and Statistics (AISTATS 2021) and links to the full paper can be found below.

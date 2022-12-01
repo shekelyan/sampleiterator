@@ -28,7 +28,7 @@ Overall:
   - 'cold<->cold' swaps are executed last
   - 'cold<->hot' swaps guarantee that integer from cold position will stay in hot position
   - ('hot<->hot' swaps do not really matter in this context)
-- internally operate in descending order and then mirror positions
+- internally operate in descending order and then mirror positions to switch it to ascending order
   - more of a quirk of current algorithm than anything deeply related to the method
 
 Note that the integers throughout the simulated/hidden shuffling algorithm cannot take the path of positions 'cold->hot->cold' and only the following scenarios are possible:

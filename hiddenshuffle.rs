@@ -33,40 +33,40 @@ impl <'a> Iterator for HiddenShuffle<'a>{
 	   
 	   while self.H > 0{
 	
-			let S_old = self.n+(self.a*f64::from( (self.N-self.n) as u32).floor()) as usize;
-			self.a *= self.rng.gen::<f64>().powf(1.0/f64::from(self.H as u32));
-			let S = self.n+(self.a*f64::from( (self.N-self.n) as u32 ).floor()) as usize;
+		let S_old = self.n+(self.a*f64::from( (self.N-self.n) as u32).floor()) as usize;
+		self.a *= self.rng.gen::<f64>().powf(1.0/f64::from(self.H as u32));
+		let S = self.n+(self.a*f64::from( (self.N-self.n) as u32 ).floor()) as usize;
 		
-			if S < S_old{
-				self.H -= 1;
-				return Some((self.N-1)-S);
+		if S < S_old{
+			self.H -= 1;
+			return Some((self.N-1)-S);
 			
-			} else {
+		} else {
 		
-				self.L += 1; // duplicate detected
-				self.H -= 1;
-			}
+			self.L += 1; // duplicate detected
+			self.H -= 1;
 		}
+	}
 		
-		while self.L > 0{
-		
-			let u = self.rng.gen::<f64>();
-			let mut s = 0;
-			let mut F = f64::from(self.L as u32)/f64::from(self.n as u32);
-			
-			while F < u && s < (self.n-self.L){
-			
-				F = 1.0-(1.0-f64::from(self.L as u32)/f64::from( (self.n-s-1) as u32))*(1.0-F);
-				s += 1;
-			}
-		
-			self.L -= 1;
-			self.n = self.n-s-1;
-			
-			return Some((self.N-1)-self.n);
-		}
+	while self.L > 0{
 	
-		return None
+		let u = self.rng.gen::<f64>();
+		let mut s = 0;
+		let mut F = f64::from(self.L as u32)/f64::from(self.n as u32);
+			
+		while F < u && s < (self.n-self.L){
+			
+			F = 1.0-(1.0-f64::from(self.L as u32)/f64::from( (self.n-s-1) as u32))*(1.0-F);
+			s += 1;
+		}
+		
+		self.L -= 1;
+		self.n = self.n-s-1;
+			
+		return Some((self.N-1)-self.n);
+	}
+	
+	return None
     }
 }
 
@@ -93,7 +93,7 @@ fn seqsample(rng : & mut rand::rngs::ThreadRng, N_ : usize, n_ : usize) -> Hidde
 		}
 	}
 	
-    HiddenShuffle { N:N, n:n, H: H, L: n-H, a: 1.0, rng: rng}
+	HiddenShuffle { N:N, n:n, H: H, L: n-H, a: 1.0, rng: rng}
 }
 
 fn main() {
@@ -171,7 +171,7 @@ fn main() {
 		
 				sample[k] = j; k = k+1; sum += i+j;
 			}
-			assert!(k == SAMPLESIZE); sample.sort()
+			assert!(k == SAMPLESIZE); sample.sort();
 		}
 		println!("\nchecksum = {} (ignore this)", sum);
 		println!("It takes {} seconds for rand::seq::index::sample + sorting to get {} sorted sets of {} numbers between 0 and {}.", now.elapsed().as_secs(), REPS, SAMPLESIZE, POPULATION-1);

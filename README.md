@@ -23,7 +23,7 @@ Basic Intuition:
 - Shuffling a deck of *N* cards with conventional algorithms unfortunately takes *O(N)* operations and requires *O(N)* memory.
 - What if we could do the shuffling and taking the top *n* cards in *O(n)* operations requiring *O(1)* memory by avoiding the explicit shuffling?
 - That's what the HiddenShuffle algorithm does!
-- The [Fisher-Yates/Knuth shuffle]((https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) algorithm works by swapping each position *i* (between *0* and *N-1*) with a random position between *i* and *N-1*.
+- The [Fisher-Yates/Knuth shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) algorithm works by swapping each position *i* (between *0* and *N-1*) with a random position between *i* and *N-1*.
 - As we go from lower positions to higher positions, after we swap position *i* with a random between between *i* and *N-1*, we never again revisit or swap with positions smaller or equal to *i*, they become permanent!
 - Let's define "hot" positions as the *n* positions between *0* and *n-1* at the of the top of the deck.
 - Let's define "cold" positions as the *N-n* positions between *n* and *N* at the bottom of the deck.

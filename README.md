@@ -27,7 +27,6 @@ Overall:
 - variation of [swap-based shuffling algorithm](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) can be chosen such that:
   - 'cold<->cold' swaps are executed last
   - 'cold<->hot' swaps guarantee that switched integer from cold position will stay in hot position (making 'cold->hot->cold' impossible)
-  - ('hot<->hot' swaps do not really matter in this context)
 - internally operate in descending order and then mirror positions to switch it to ascending order
   - more of a quirk of current algorithm than anything deeply related to the method
 

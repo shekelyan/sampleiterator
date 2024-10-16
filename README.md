@@ -74,7 +74,7 @@ Step 3 of the Hidden Shuffle Algorithm determines which hot positions end up aga
 
 A more detailled explanation has been presented at the 24th International Conference on
 Artificial Intelligence and Statistics (AISTATS 2021) and links to the full paper can be found below.
-In the paper initially low-items are cards in the 'hot' positions and initially high-items are cards in the 'cold' positions.
+In the paper low-items are cards that begin in 'hot' positions and high-items are cards that begin in 'cold' positions.
 
 # Errata / Corrections
 

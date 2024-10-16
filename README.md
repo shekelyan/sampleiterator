@@ -37,6 +37,8 @@ Basic Intuition:
   - after we visit position *i* we never revisit or swap with positions smaller than *i*
   - that means once we swap a card into position *i*, it will stay there!
   - that also means once a card is swapped from a cold into a hot position, that card will stay in that hot position and be selected for our random subset!
+- For sake of convenience the HiddenShuffle goes from bottom (position *N-1*) to the top (position *0*):
+  - random positions in descending order are simply mirrored to get random positions in ascending order
 
 Each card can therefore only take one of the following paths through the shuffling:
 
@@ -48,16 +50,14 @@ Each card can therefore only take one of the following paths through the shuffli
 
 Step 1 of the Hidden Shuffle Algorithm counts the number of hot<->cold swaps:
 
-- (exploits that number of cards following 'hot->hot.' path can be determined efficiently)
-- determine the number *H* that counts the random number of hot<->cold swaps by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
-- that means that exactly *n-H* cards go 'hot->hot.' (they never enter a cold position)
-- that means that exactly *H* cards go 'cold->hot.' or 'hot->cold->hot.'
+- exactly *H* cards go 'cold->hot.' or 'hot->cold->hot.'
+  - *H* can be determined by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
+- exactly *n-H* cards go 'hot->hot.' (they never enter a cold position)
 
 Step 2 of the Hidden Shuffle Algorithm determines which cold positions are involved in hot<->cold swaps and samples them, while simultaneously counting the number of 'hot->cold->hot.' instances:
 
-- (exploits that you can determine cold positions independently and all cold positions are equally likely)
-- determine the random *H* cold positions involved in hot<->cold swaps by:
-  - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
+- there are *H* random cold positions in hot<->cold swaps, as they are all equally likely we can take a with-replacement sample of size *H* from the cold positions:
+  - generate *H* independent random numbers between *0* and *1* in descending order using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution)
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
     - (those random cold positions correspond to cards taking the path 'cold->hot.')
   - counting repeated cold positions towards cards taking the path 'hot->cold->hot.' (increasing the *L* number)

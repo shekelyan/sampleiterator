@@ -40,7 +40,7 @@ Note that the integers throughout the simulated/hidden shuffling algorithm canno
 Step 1:
   
 - determine the number *H* that counts the random number of cold<->hot swaps by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
-- that means that exactly *n-H* integers never enter a cold position in this shuffle simulation 
+- that means that exactly *n-H* integers go 'hot->hot'> (they never enter a cold position)
 
 Step 2:
 

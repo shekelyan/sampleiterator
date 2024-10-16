@@ -39,13 +39,15 @@ Note that the integers throughout the simulated/hidden shuffling algorithm can o
 - 'hot->cold' (integer from originally hot position does not get selected)
 
 Step 1:
-  
+
+- (exploits that number of integers following 'hot->hot' path can be determined efficiently)
 - determine the number *H* that counts the random number of cold<->hot swaps by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
 - that means that exactly *n-H* integers go 'hot->hot' (they never enter a cold position)
 - that means that exactly *H* integers go 'cold->hot' or 'hot->cold->hot'
 
 Step 2:
 
+- (exploits that you can determine cold positions independently and all cold positions are equally likely)
 - determine the random *H* cold positions involved in 'cold<->hot' swaps by:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
@@ -54,6 +56,7 @@ Step 2:
 
 Step 3:
 
+- (exploits that any hot position is equally likely such that one just need to pick random subset of hot positions to fill up sample)
 - the number *L* then counts the number of integers either going 'hot->hot' (counted in step 1) or 'hot->cold->hot' (counted in step 2)
 - select random subset of size *L* from the original hot positions
   - using any method that selects *L* random positions out of the *n* hot positions

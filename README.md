@@ -25,22 +25,24 @@ Overall:
   - after shuffling: the *n* hot positions hold a random subset of size *n*
   - "hidden shuffle" is a fast simulation of this (hidden) shuffling and selecting integers at hot positions
 - variation of [swap-based shuffling algorithm](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) can be chosen such that:
-  - 'cold<->hot' swaps guarantee that cold integer will stay in hot position (making 'cold->hot->...->cold' impossible)
+  - 'cold<->hot' swaps guarantee that cold integer will stay in hot position (making 'cold->hot->cold' impossible)
   - 'cold<->cold' swaps are executed last
 - internally operate in descending order and then mirror positions to switch it to ascending order
   - more of a quirk of current algorithm than anything deeply related to the method
 
-Note that the integers throughout the simulated/hidden shuffling algorithm cannot take the path of positions 'cold->hot->cold' and only the following scenarios are possible:
+Note that the integers throughout the simulated/hidden shuffling algorithm can only take the following paths due to cold->hot being permanent:
 
+- 'hot->hot' (integer from originally hot position gets selected without ever entering a cold position)
 - 'cold->hot' (integer from originally cold position gets selected)
 - 'cold->cold' (integer from originally cold position does not get selected)
-- 'hot->...->hot' (integer from originally hot position gets selected)
-- 'hot->...->cold' (integer from originally hot position does not get selected)
+- 'hot->cold->hot' (integer from originally hot position gets selected after entering one cold position)
+- 'hot->cold' (integer from originally hot position does not get selected)
 
 Step 1:
   
 - determine the number *H* that counts the random number of cold<->hot swaps by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
 - that means that exactly *n-H* integers go 'hot->hot' (they never enter a cold position)
+- that means that exactly *H* integers go 'cold->hot' or 'hot->cold->hot'
 
 Step 2:
 
@@ -48,14 +50,15 @@ Step 2:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
     - (those random cold positions correspond to integers taking the path 'cold->hot')
-  - counting repeated cold positions towards integers taking the path 'hot->cold->...->hot' (increasing the *L* number)
+  - counting repeated cold positions towards integers taking the path 'hot->cold->hot' (increasing the *L* number)
 
 Step 3:
 
-- the number *L* then counts the number of integers either going 'hot->hot' (counted in step 1) or 'hot->cold->...->hot' (counted in step 2)
+- the number *L* then counts the number of integers either going 'hot->hot' (counted in step 1) or 'hot->cold->hot' (counted in step 2)
 - select random subset of size *L* from the original hot positions
   - using any method that selects *L* random positions out of the *n* hot positions
     - the current algorithm uses Vitter's algorithm A from the [literature](https://dl.acm.org/doi/pdf/10.1145/23002.23003)
+    - the not-selected hot positions all went 'hot->cold' without returning to a hot position
 
 A more detailled explanation has been presented at the 24th International Conference on
 Artificial Intelligence and Statistics (AISTATS 2021) and links to the full paper can be found below.

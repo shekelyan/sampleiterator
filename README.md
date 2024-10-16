@@ -60,6 +60,7 @@ Step 3:
 
 A more detailled explanation has been presented at the 24th International Conference on
 Artificial Intelligence and Statistics (AISTATS 2021) and links to the full paper can be found below.
+In the paper initially low-items are in the 'hot' positions and initially high-items are in the 'cold' positions.
 
 # Errata / Corrections
 

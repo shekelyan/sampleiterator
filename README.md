@@ -53,6 +53,7 @@ Step 2:
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
     - (those random cold positions correspond to integers taking the path 'cold->hot')
   - counting repeated cold positions towards integers taking the path 'hot->cold->hot' (increasing the *L* number)
+  - (for involved cold position *c* the first cold<->hot swap means that *c* takes 'cold->hot' path, but additional cold<->hot swaps mean that the current hot integer at *c* takes 'hot->cold->hot' path through position *c* as it is being swapped back into a hot position)
 
 Step 3:
 

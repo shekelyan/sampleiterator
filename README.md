@@ -22,11 +22,11 @@ Overall:
 - the task is selecting a random subset of *n* positions out of *N* positions
   - split all *N* positions into *n* "hot" positions and *N-n* "cold" positions
   - bring all integers between *0* and *N-1* into a random order with a shuffling algorithm
-  - after shuffling the *n* hot positions hold a random subset of size *n*
-  - "hidden shuffle" is fast simulation of this (hidden) shuffling and selecting integers at hot positions
+  - after shuffling: the *n* hot positions hold a random subset of size *n*
+  - "hidden shuffle" is a fast simulation of this (hidden) shuffling and selecting integers at hot positions
 - variation of [swap-based shuffling algorithm](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) can be chosen such that:
   - 'cold<->cold' swaps are executed last
-  - 'cold<->hot' swaps guarantee that integer from cold position will stay in hot position
+  - 'cold<->hot' swaps guarantee that switched integer from cold position will stay in hot position (making 'cold->hot->cold' impossible)
   - ('hot<->hot' swaps do not really matter in this context)
 - internally operate in descending order and then mirror positions to switch it to ascending order
   - more of a quirk of current algorithm than anything deeply related to the method
@@ -45,16 +45,16 @@ Step 1:
 
 Step 2:
 
-- simulate the *H* cold positions involved in 'cold<->hot' swaps by:
+- determine the random *H* cold positions involved in 'cold<->hot' swaps by:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
     - (those random cold positions correspond to integers taking the path 'cold->hot')
-  - counting repeated cold positions towards integers taking the path 'hot->cold->...->hot'
+  - counting repeated cold positions towards integers taking the path 'hot->cold->...->hot' (increasing the *L* number)
 
 Step 3:
 
-- the number *L* counts the integers that take the path 'hot->cold->...->hot' or never entered a cold position
-- select random subset of size *L* from the hot positions
+- the number *L* then counts the number of integers either going 'hot->hot' (counted in step 1) or 'hot->cold->...->hot' (counted in step 2)
+- select random subset of size *L* from the original hot positions
   - using any method that selects *L* random positions out of the *n* hot positions
     - the current algorithm uses Vitter's algorithm A from the [literature](https://dl.acm.org/doi/pdf/10.1145/23002.23003)
 
@@ -63,7 +63,7 @@ Artificial Intelligence and Statistics (AISTATS 2021) and links to the full pape
 
 # Errata / Corrections
 
-The original manuscript (http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf) had an off-by-one error: 
+The original manuscript (http://proceedings.mlr.press/v130/shekelyan21a/shekelyan21a.pdf) had an off-by-one error in the implementation of Vitter's algorithm A for step 3: 
 
 * p.6, Code 1, l.10, "max(N-i,1)" instead of "N-i" to suppress ZeroDivisionError
 * p.6, Code 1, l.27, "(n-s-1)" instead of "(n-s)"

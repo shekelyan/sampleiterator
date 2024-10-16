@@ -25,7 +25,6 @@ Overall:
   - after shuffling: the *n* hot positions hold a random subset of size *n*
   - "hidden shuffle" is a fast simulation of this (hidden) shuffling and selecting integers at hot positions
 - variation of [swap-based shuffling algorithm](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) can be chosen such that:
-  - 'hot<->hot' swaps are executed first
   - 'cold<->hot' swaps guarantee that cold integer will stay in hot position (making 'cold->hot->...->cold' impossible)
   - 'cold<->cold' swaps are executed last
 - internally operate in descending order and then mirror positions to switch it to ascending order

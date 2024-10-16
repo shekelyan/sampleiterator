@@ -27,7 +27,7 @@ Basic Intuition:
   - going through the cards from top to bottom (the very top being position *0* and the very bottom being position *N-1*)
   - for each position *i* (between *0* and *N-1*): swap the card at position *i* with a card at a random position between *i* and *N-1*
 - Let's define "hot" positions as the *n* positions between *0* and *n-1* at the of the top of the deck.
-- Let's define "cold" positions as the *N-n* positions between *n* and *N* at the bottom of the deck.
+- Let's define "cold" positions as the *N-n* positions between *n* and *N-1* at the bottom of the deck.
 - The shuffling algorithm will initially do either
   - hot<->hot swaps (swapping the cards at two hot positions)
   - hot<->cold swaps (swapping the cards at a hot and a cold position).
@@ -40,37 +40,37 @@ Basic Intuition:
 
 Each card can therefore only take one of the following paths through the shuffling:
 
-- 'hot->hot' (card from originally hot position gets selected without ever entering a cold position)
-- 'cold->hot' (card from originally cold position gets selected)
-- 'cold->cold' (card from originally cold position does not get selected)
-- 'hot->cold->hot' (card from originally hot position gets selected after entering one cold position)
-- 'hot->cold' (card from originally hot position does not get selected)
+- 'hot->hot.' (card from originally hot position gets selected without ever entering a cold position)
+- 'cold->hot.' (card from originally cold position gets selected)
+- 'cold->cold.' (card from originally cold position does not get selected)
+- 'hot->cold->hot.' (card from originally hot position gets selected after entering a cold position)
+- 'hot->cold.' (card from originally hot position does not get selected)
 
 Step 1 of the Hidden Shuffle Algorithm counts the number of hot<->cold swaps:
 
-- (exploits that number of cards following 'hot->hot' path can be determined efficiently)
+- (exploits that number of cards following 'hot->hot.' path can be determined efficiently)
 - determine the number *H* that counts the random number of hot<->cold swaps by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
-- that means that exactly *n-H* cards go 'hot->hot' (they never enter a cold position)
-- that means that exactly *H* cards go 'cold->hot' or 'hot->cold->hot'
+- that means that exactly *n-H* cards go 'hot->hot.' (they never enter a cold position)
+- that means that exactly *H* cards go 'cold->hot.' or 'hot->cold->hot.'
 
-Step 2 of the Hidden Shuffle Algorithm determines which cold positions are involved in hot<->cold swaps and samples them, while simultaneously counting the number of hot->cold->hot instances:
+Step 2 of the Hidden Shuffle Algorithm determines which cold positions are involved in hot<->cold swaps and samples them, while simultaneously counting the number of 'hot->cold->hot.' instances:
 
 - (exploits that you can determine cold positions independently and all cold positions are equally likely)
 - determine the random *H* cold positions involved in hot<->cold swaps by:
   - using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution) to generate *H* independent random numbers between *0* and *1* in descending order
   - scaling (and rounding) those *0* to *1* values to random cold positions in descending order
-    - (those random cold positions correspond to cards taking the path 'cold->hot')
-  - counting repeated cold positions towards cards taking the path 'hot->cold->hot' (increasing the *L* number)
-  - (for involved cold position *c* the first hot<->cold swap means that *c* takes 'cold->hot' path, but additional hot<->cold swaps mean that the current initially hot card at *c* takes a 'hot->cold->hot' path through cold position *c* as it is being swapped back into a hot position)
+    - (those random cold positions correspond to cards taking the path 'cold->hot.')
+  - counting repeated cold positions towards cards taking the path 'hot->cold->hot.' (increasing the *L* number)
+  - (for involved cold position *c* the first hot<->cold swap means that *c* takes 'cold->hot' path, but additional hot<->cold swaps mean that the current initially hot card at *c* takes a 'hot->cold->hot.' path through cold position *c* as it is being swapped back into a hot position)
 
 Step 3 of the Hidden Shuffle Algorithm determines which hot positions end up again in a hot position and samples them:
 
 - (exploits that any hot position is equally likely such that one just need to pick random subset of hot positions to fill up sample)
-- the number *L* then counts the number of cards either going 'hot->hot' (counted in step 1) or 'hot->cold->hot' (counted in step 2)
+- the number *L* then counts the number of cards either going 'hot->hot.' (counted in step 1) or 'hot->cold->hot.' (counted in step 2)
 - select random subset of size *L* from the original hot positions
   - using any method that selects *L* random positions out of the *n* hot positions
     - the current algorithm uses Vitter's algorithm A from the [literature](https://dl.acm.org/doi/pdf/10.1145/23002.23003)
-    - the not-selected hot positions all went 'hot->cold' without returning to a hot position
+    - the not-selected hot positions all went 'hot->cold.' without returning to a hot position
 
 A more detailled explanation has been presented at the 24th International Conference on
 Artificial Intelligence and Statistics (AISTATS 2021) and links to the full paper can be found below.

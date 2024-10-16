@@ -48,13 +48,13 @@ Each card can therefore only take one of the following paths through the shuffli
 - 'hot->cold->hot' (card from originally hot position gets selected after entering a cold position)
 - 'hot->cold' (card from originally hot position does not get selected)
 
-Step 1 of the Hidden Shuffle Algorithm counts the number of hot<->cold swaps:
+Step 1 of the Hidden Shuffle Algorithm counts the number of hot<->cold swaps (sampling one number from poisson-binomial distribution):
 
 - exactly *H* cards go 'cold->hot' or 'hot->cold->hot'
   - *H* can be determined by generating a random number that follows the appropriate [distribution](https://en.wikipedia.org/wiki/Poisson_binomial_distribution)
 - exactly *n-H* cards go 'hot->hot' (they never enter a cold position)
 
-Step 2 of the Hidden Shuffle Algorithm determines which cold positions are involved in hot<->cold swaps and samples them, while simultaneously counting the number of 'hot->cold->hot' instances:
+Step 2 of the Hidden Shuffle Algorithm determines which cold positions are involved in hot<->cold swaps (sampling *H* cold positions with-replacement):
 
 - there are *H* random cold positions in hot<->cold swaps, as they are all equally likely we can take a with-replacement sample of size *H* from the cold positions:
   - generate *H* independent random numbers between *0* and *1* in descending order using [order statistics](https://en.wikipedia.org/wiki/Order_statistic#Order_statistics_sampled_from_a_uniform_distribution)
@@ -63,7 +63,7 @@ Step 2 of the Hidden Shuffle Algorithm determines which cold positions are invol
   - counting repeated cold positions towards cards taking the path 'hot->cold->hot' (increasing the *L* number)
   - (for involved cold position *c* the first hot<->cold swap means that *c* takes 'cold->hot' path, but additional hot<->cold swaps mean that the current initially hot card at *c* takes a 'hot->cold->hot' path through cold position *c* as it is being swapped back into a hot position)
 
-Step 3 of the Hidden Shuffle Algorithm determines which hot positions end up again in a hot position and samples them:
+Step 3 of the Hidden Shuffle Algorithm determines which hot positions end up again in a hot position (sampling *L* hot positions without-replacement):
 
 - (exploits that any hot position is equally likely such that one just need to pick random subset of hot positions to fill up sample)
 - the number *L* then counts the number of cards either going 'hot->hot' (counted in step 1) or 'hot->cold->hot' (counted in step 2)
